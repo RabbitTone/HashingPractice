@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.List;
 public class SeperateChainingHash<AnyType>{
   /**
    * Construct the hash table.
@@ -22,8 +23,8 @@ public class SeperateChainingHash<AnyType>{
    * */
   public void insert(AnyType x){
     List<AnyType> whichList = theLists[myhash(x)];
-    if(!whichLists.contains(x)){
-      whichLIst.add(x);
+    if(!whichList.contains(x)){
+      whichList.add(x);
       if(++currentSize > theLists.length)
         rehash();
     }
@@ -34,7 +35,7 @@ public class SeperateChainingHash<AnyType>{
    * */
   public void remove(AnyType x){
     List<AnyType> whichList = theLists[myhash(x)];
-    if(whichList.containts(x)){
+    if(whichList.contains(x)){
       whichList.remove(x);
       currentSize--;
     }
@@ -59,21 +60,71 @@ public class SeperateChainingHash<AnyType>{
   
   private static final int DEFAULT_TABLE_SIZE = 101;
   
-  private List[] theLists;
+  private List<AnyType>[] theLists;
   private int currentSize;
   
   private void rehash(){
-    
+    List<AnyType> [] oldLists = theLists;
+    //create new double-sized table
+    theLists = new List[nextPrime(2 * theLists.length)];
+    for(int j = 0; j < theLists.length; j++)
+      theLists[j] = new LinkedList<>();
+    //copy table over
+    currentSize = 0;
+    for(List<AnyType> list : oldLists){
+      for(AnyType item : list){
+        insert(item);
+      }
+    }
   }
   private int myhash(AnyType x){
     int val = x.hashCode();
     val %= theLists.length;
+    if(val < 0)
+      val += theLists.length;
     return val;
   }
   private static int nextPrime(int n){
-    
+    if(n % 2 == 0)
+      n++;
+    for( ; !isPrime(n); n += 2)
+      ;
+    return n;
   }
   private static boolean isPrime(int n){
+    if(n == 2 || n == 3)
+      return true;
+    if(n == 1 || n % 2 == 0)
+      return false;
+    for(int i = 3; i * i <= n; i += 2){
+      if(n % i == 0)
+        return false;
+    }
+    return true;
+  }
+  //Simple main
+  public static void main(String[] args){
+    SeperateChainingHash<Integer> H = new SeperateChainingHash<>();
+    long startTime = System.currentTimeMillis();
     
+    final int NUMS = 2000000;
+    final int GAP = 37;
+    
+    System.out.println("Checking... (no more output means success)");
+    
+    for(int i = GAP; i != 0; i = (i + GAP) % NUMS)
+      H.insert(i);
+    for(int i = 1; i < NUMS; i += 2)
+      H.remove(i);
+    for(int i = 2; i < NUMS; i += 2){
+      if( !H.contains(i))
+        System.out.println( "Find fails" + i);
+    }
+    for(int i = 1; i < NUMS; i += 2){
+      if(H.contains(i))
+        System.out.println("OOPS!!!" + i);
+    }
+    long endTime = System.currentTimeMillis();
+    System.out.println("Elapsed time: " +(endTime - startTime));
   }
 }
