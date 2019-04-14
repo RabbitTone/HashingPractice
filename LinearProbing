@@ -1,8 +1,8 @@
 public class LinearProbingHash{
   public int[] table;
-  public int size; //size of array
-  public int n = 0; //# of entries occupied
-  public final int DEFAULT_TABLE_SIZE = 5;
+  public int size;                                  //size of array
+  public int n = 0;                                 //# of entries occupied
+  public final int DEFAULT_TABLE_SIZE = 5; 
   
   //Without size
   public LinearProbingHash(){
@@ -30,6 +30,13 @@ public class LinearProbingHash{
     }
     return -1;
   }
+  
+  /**
+   * This method will take an int and return a boolean
+   * determinded by wether or not the value is already in 
+   * the array or if the spot is available. 
+   * @param x given int to add to array
+   * */
   public boolean add(int x){
     if(find(x) != -1) return false;
     int i = x % this.size; //f(x) = x mod size
@@ -39,6 +46,14 @@ public class LinearProbingHash{
     this.table[i] = x;
     return true;
   }
+  
+  /**
+   * This method removes an int in the 
+   * array by looking for the hash value
+   * and setting the corresponding address
+   * to zero
+   * @param x given int to remove array
+   * */
   public int remove(int x){
     int i = x % this.size;
     while(table[i] != 0){
@@ -59,3 +74,4 @@ public class LinearProbingHash{
       System.out.println("["+i+"] ["+this.table[i]+"]");
   }
 }
+    
