@@ -1,0 +1,61 @@
+public class LinearProbingHash{
+  public int[] table;
+  public int size; //size of array
+  public int n = 0; //# of entries occupied
+  public final int DEFAULT_TABLE_SIZE = 5;
+  
+  //Without size
+  public LinearProbingHash(){
+    this.size = DEFAULT_TABLE_SIZE;
+    this.table = new int[size];
+  }
+  //With size
+  public LinearProbingHash(int x){
+    this.size = x;
+    this.table = new int[size];
+  }
+  /**
+   * This method will take an int 
+   * and traverse the hash table to 
+   * determine wether or not the int is 
+   * found within the table by returning the 
+   * contained hash value, else we return -1
+   * @param x given value to find
+   * */
+  public int find(int x){
+    int i = x % this.size;
+    while(table[i] != -1){
+      if(x == this.table[i]) return this.table[i];
+      i = (i == table.length-1) ? 0 : i + 1; //increment i
+    }
+    return -1;
+  }
+  public boolean add(int x){
+    if(find(x) != -1) return false;
+    int i = x % this.size; //f(x) = x mod size
+    while(table[i] != 0)
+      i = (i == table.length-1) ? 0 : i + 1; //increment i
+    n++;
+    this.table[i] = x;
+    return true;
+  }
+  public int remove(int x){
+    int i = x % this.size;
+    while(table[i] != 0){
+      int y = table[i];
+      if(x == y){
+        table[i] = 0;
+        n--;
+      }
+      i = (i == table.length-1) ? 0 : i + 1;
+    }
+    return -1;
+  }
+  public void printLoadFactor(){
+    System.out.println(this.n / this.size);
+  }
+  public void printArray(){
+    for(int i = 0; i < this.size; i++)
+      System.out.println("["+i+"] ["+this.table[i]+"]");
+  }
+}
