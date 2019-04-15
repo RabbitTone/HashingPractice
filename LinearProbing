@@ -1,8 +1,17 @@
+/**
+ * Next Step: revisit add to accommodate 
+ * for an int that's already in the array
+ * Then create a method for the even in which
+ * the array will be filled up which will 
+ * resize the array called ensureCapacity()
+ * */
 public class LinearProbingHash{
   public int[] table;
   public int size;                                  //size of array
   public int n = 0;                                 //# of entries occupied
   public final int DEFAULT_TABLE_SIZE = 5; 
+  
+  
   
   //Without size
   public LinearProbingHash(){
@@ -25,8 +34,11 @@ public class LinearProbingHash{
   public int find(int x){
     int i = x % this.size;
     while(table[i] != -1){
-      if(x == this.table[i]) return this.table[i];
-      i = (i == table.length-1) ? 0 : i + 1; //increment i
+      System.out.println("in while");
+      if(i == this.table[i])
+        return this.table[i];
+      else
+        i = (i == table.length-1) ? 0 : i + 1; //increment i
     }
     return -1;
   }
@@ -38,7 +50,7 @@ public class LinearProbingHash{
    * @param x given int to add to array
    * */
   public boolean add(int x){
-    if(find(x) != -1) return false;
+    //if(find(x) != -1) return false;
     int i = x % this.size; //f(x) = x mod size
     while(table[i] != 0)
       i = (i == table.length-1) ? 0 : i + 1; //increment i
@@ -67,11 +79,11 @@ public class LinearProbingHash{
     return -1;
   }
   public void printLoadFactor(){
-    System.out.println(this.n / this.size);
+    double lf = this.n/this.size;
+    System.out.println(lf);
   }
   public void printArray(){
     for(int i = 0; i < this.size; i++)
       System.out.println("["+i+"] ["+this.table[i]+"]");
   }
 }
-    
